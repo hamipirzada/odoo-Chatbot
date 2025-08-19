@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- AI Chatbot Action -->
+        <record id="action_ai_chatbot" model="ir.actions.client">
+            <field name="name">AI Business Assistant</field>
+            <field name="tag">ai_analytics.chatbot_action</field>
+            <field name="target">current</field>
+        </record>
+
+        <!-- AI Chatbot Menu -->
+        <menuitem id="menu_ai_chatbot" 
+                  name="AI Business Assistant" 
+                  parent="menu_ai_analytics_root" 
+                  action="action_ai_chatbot" 
+                  sequence="5"/>
+
+        <!-- Chat Sessions List View -->
+        <record id="view_ai_chatbot_tree" model="ir.ui.view">
+            <field name="name">ai.chatbot.tree</field>
+            <field name="model">ai.chatbot</field>
+            <field name="arch" type="xml">
+                <tree string="AI Chat Sessions">
+                    <field name="name"/>
+                    <field name="user_id"/>
+                    <field name="create_date"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Chat Session Form View -->
+        <record id="view_ai_chatbot_form" model="ir.ui.view">
+            <field name="name">ai.chatbot.form</field>
+            <field name="model">ai.chatbot</field>
+            <field name="arch" type="xml">
+                <form string="AI Chat Session">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="user_id"/>
+                                <field name="active"/>
+                            </group>
+                            <group>
+                                <field name="create_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Messages">
+                                <field name="messages">
+                                    <tree>
+                                        <field name="timestamp"/>
+                                        <field name="is_user"/>
+                                        <field name="message"/>
+                                    </tree>
+                                    <form>
+                                        <group>
+                                            <field name="timestamp"/>
+                                            <field name="is_user"/>
+                                            <field name="tokens_used"/>
+                                        </group>
+                                        <field name="message"/>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Session Data">
+                                <field name="session_data" widget="text"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Chat Sessions Action -->
+        <record id="action_ai_chatbot_sessions" model="ir.actions.act_window">
+            <field name="name">Chat Sessions</field>
+            <field name="res_model">ai.chatbot</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Chat Sessions Menu -->
+        <menuitem id="menu_ai_chatbot_sessions" 
+                  name="Chat Sessions" 
+                  parent="menu_ai_analytics_root" 
+                  action="action_ai_chatbot_sessions" 
+                  sequence="15"/>
+
+        <!-- System Configuration Menu -->
+        <menuitem id="menu_ai_analytics_config" 
+                  name="Configuration" 
+                  parent="menu_ai_analytics_root" 
+                  sequence="20"/>
+    </data>
+</odoo>

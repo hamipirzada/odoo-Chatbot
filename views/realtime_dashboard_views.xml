@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tree View -->
+        <record id="view_realtime_dashboard_tree" model="ir.ui.view">
+            <field name="name">realtime.dashboard.tree</field>
+            <field name="model">realtime.dashboard</field>
+            <field name="arch" type="xml">
+                <tree string="Real-time Dashboards">
+                    <field name="name"/>
+                    <field name="dashboard_type"/>
+                    <field name="last_refresh"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_realtime_dashboard_form" model="ir.ui.view">
+            <field name="name">realtime.dashboard.form</field>
+            <field name="model">realtime.dashboard</field>
+            <field name="arch" type="xml">
+                <form string="Real-time Dashboard">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="dashboard_type"/>
+                                <field name="active"/>
+                            </group>
+                            <group>
+                                <field name="last_refresh"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Dashboard Data">
+                                <field name="data" widget="text"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_realtime_dashboard" model="ir.actions.act_window">
+            <field name="name">Real-time Dashboards</field>
+            <field name="res_model">realtime.dashboard</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Menu -->
+        <menuitem id="menu_ai_analytics_root" name="AI Analytics" sequence="100"/>
+        <!-- <menuitem id="menu_realtime_dashboard" name="Real-time Dashboards" 
+                  parent="menu_ai_analytics_root" 
+                  action="action_realtime_dashboard" 
+                  sequence="10"/> -->
+    </data>
+</odoo>
