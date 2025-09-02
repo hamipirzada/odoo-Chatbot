@@ -18,45 +18,45 @@ python3 setup_api_key.py
 
 # Option 2: Manual setup in Odoo
 # Settings → System Parameters
-# Key: ai_analytics.groq_api_key
-# Value: your_groq_api_key
+# Key: ai_analytics.claude_api_key
+# Value: your_claude_api_key
 ```
 
-### 3. Get Groq API Key
-Visit: https://console.groq.com/keys (Free tier available)
+### 3. Get Claude API Key
+Visit: https://console.anthropic.com/ (API access required)
 
 ## 🚀 Usage Examples
 
-### Sales Analysis
+### Accounting Analysis
 ```
-"year wise sales from starting till 2025"
-"top 10 products sold by revenue"  
-"sales trends for 2024"
-"recent customer orders"
-```
-
-### Inventory Management
-```
-"current stock levels"
-"products running low"
-"inventory by location" 
-"product categories overview"
+"show me journal entries for this month"
+"analyze account balances"
+"what are the recent financial transactions"
+"invoice payment status"
 ```
 
-### Manufacturing
+### Financial Reporting
 ```
-"production status overview"
-"manufacturing orders this month"
-"quality control reports"
-"BOM analysis"
+"accounting summary for Q4"
+"payment analysis"
+"debit and credit overview"
+"journal entry trends"
 ```
 
-### Financial Analytics  
+### Invoice Management
 ```
-"invoice summary"
-"payment status"
-"financial overview"
-"profit analysis"
+"recent invoices created"
+"payment status overview"
+"customer receivables"
+"vendor payables"
+```
+
+### Balance Analysis
+```
+"account balances summary"
+"financial position overview"
+"cash flow analysis"
+"accounting data consistency check"
 ```
 
 ## 🔧 Technical Requirements
@@ -64,18 +64,18 @@ Visit: https://console.groq.com/keys (Free tier available)
 - **Odoo**: Version 17.0+
 - **Python**: 3.8+
 - **Database**: PostgreSQL
-- **API**: Groq (for AI analysis)
-- **Modules**: Access to sales, inventory, manufacturing data
+- **API**: Claude (for AI analysis)
+- **Modules**: Access to accounting and financial data
 
 ## 📊 Data Access
 
 The chatbot accesses:
-- **Sales Orders**: Complete transaction history
-- **Products**: Full catalog with pricing/stock
-- **Customers**: Partner relationships
-- **Manufacturing**: Production orders & BOMs
-- **Inventory**: Stock levels & movements
-- **Financial**: Invoices & payments
+- **Journal Entries**: Complete accounting transaction history
+- **Account Moves**: Financial transaction records
+- **Account Move Lines**: Detailed line-level accounting data
+- **Invoices**: Customer and vendor invoice data
+- **Payments**: Payment transaction records
+- **Balances**: Account balance information
 
 ## 🛠️ Troubleshooting
 
@@ -84,40 +84,41 @@ The chatbot accesses:
 **"Models not available"**
 ```bash
 # Check user permissions in Odoo
-# Ensure access to Sales, Inventory, Manufacturing apps
+# Ensure access to Accounting app
 ```
 
 **API Key Issues**
 ```bash
 # Verify API key in System Parameters
-# Check Groq account status
+# Check Claude account status
 ```
 
 **No Data Returned**
 ```bash
-# Test with: "test models"  
+# Test with: "accounting overview"  
 # Check Odoo logs for errors
 ```
 
 ## 🎯 Features
 
 - ✅ AI-driven intent analysis
-- ✅ Real-time ERP data access  
-- ✅ Year-wise sales breakdowns
-- ✅ Product performance analytics
-- ✅ Manufacturing insights
-- ✅ Financial reporting
-- ✅ Customer relationship analysis
-- ✅ Inventory management
+- ✅ Real-time accounting data access  
+- ✅ Financial transaction analysis
+- ✅ Journal entry insights
+- ✅ Invoice and payment tracking
+- ✅ Account balance reporting
+- ✅ Data consistency checks
+- ✅ Accounting-focused responses
 - ✅ Fallback without API
 
 ## 📈 Performance
 
-- Handles 6,920+ sales records
-- $79M+ transaction analysis
-- 50+ specialized modules
+- Handles large accounting datasets
+- Financial transaction analysis
+- Accounting-focused modules
 - Real-time data processing
 - Intelligent caching
+- Consistent response accuracy
 
 ## 🔐 Security
 
@@ -125,6 +126,8 @@ The chatbot accesses:
 - Secure API integration
 - No data storage outside Odoo
 - Encrypted API communications
+- Accounting data restrictions
+- Access control enforcement
 
 ---
 

@@ -2,6 +2,8 @@ from odoo import http
 from odoo.http import request
 import json
 import logging
+from datetime import datetime
+import pytz
 
 _logger = logging.getLogger(__name__)
 
@@ -9,11 +11,11 @@ _logger = logging.getLogger(__name__)
 class ChatbotController(http.Controller):
 
     @http.route('/ai_analytics/chat', type='json', auth='user', methods=['POST'])
-    def chat_message(self, message, session_id=None):
+    def chat_message(self, message, session_id=None, model='claude'):
         """Handle chatbot messages from the web interface"""
         try:
             chatbot_model = request.env['ai.chatbot']
-            result = chatbot_model.send_message(message, session_id)
+            result = chatbot_model.send_message(message, session_id, model)
             return result
         except Exception as e:
             _logger.error(f"Chat controller error: {str(e)}")
@@ -35,22 +37,39 @@ class ChatbotController(http.Controller):
             for chat in chats:
                 # Get the first user message as preview
                 first_message = chat.messages.filtered(lambda m: m.is_user).sorted('timestamp')
-                preview = first_message[0].message if first_message else "New Chat"
+                preview = first_message[0].message if len(first_message) > 0 else "New Chat"
                 
                 # Convert UTC to user timezone if needed
-                from datetime import datetime
-                import pytz
                 
                 # Get user timezone (default to UTC if not available)
                 user_tz = request.env.user.tz or 'UTC'
                 user_timezone = pytz.timezone(user_tz)
                 
-                # Convert chat creation time to user timezone
+                # Convert chat creation time to user timezone with enhanced formatting
                 if chat.create_date:
                     # Odoo stores dates in UTC
                     utc_time = chat.create_date.replace(tzinfo=pytz.UTC)
                     local_time = utc_time.astimezone(user_timezone)
-                    formatted_date = local_time.strftime('%m/%d %H:%M')
+                    
+                    # Calculate time difference for smart formatting
+                    now = datetime.now(user_timezone)
+                    time_diff = now - local_time
+                    
+                    if time_diff.days == 0:
+                        # Today - show time only
+                        formatted_date = local_time.strftime('%I:%M %p')
+                    elif time_diff.days == 1:
+                        # Yesterday
+                        formatted_date = f"Yesterday {local_time.strftime('%I:%M %p')}"
+                    elif time_diff.days < 7:
+                        # This week - show day
+                        formatted_date = local_time.strftime('%A %I:%M %p')
+                    elif time_diff.days < 365:
+                        # This year - show month/day
+                        formatted_date = local_time.strftime('%b %d, %I:%M %p')
+                    else:
+                        # Older - show full date
+                        formatted_date = local_time.strftime('%b %d, %Y %I:%M %p')
                 else:
                     formatted_date = 'Unknown'
                 
@@ -58,6 +77,7 @@ class ChatbotController(http.Controller):
                     'id': chat.id,
                     'name': preview[:30] + '...' if len(preview) > 30 else preview,
                     'date': formatted_date,
+                    'date_iso': chat.create_date.isoformat() if chat.create_date else None,
                     'message_count': len(chat.messages)
                 })
             
@@ -77,7 +97,6 @@ class ChatbotController(http.Controller):
     def create_new_chat(self, **kwargs):
         """Create a new chat session"""
         try:
-            from datetime import datetime
             chat = request.env['ai.chatbot'].create({
                 'name': f'Chat {datetime.now().strftime("%Y-%m-%d %H:%M")}',
                 'user_id': request.env.user.id

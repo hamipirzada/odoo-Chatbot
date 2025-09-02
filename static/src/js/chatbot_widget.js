@@ -16,10 +16,12 @@ export class ChatbotWidget extends Component {
             currentChatId: null,
             recentChats: [],
             sidebarCollapsed: false,
+            selectedModel: 'claude',
         });
         
         this.messageInput = useRef("messageInput");
         this.messagesContainer = useRef("messagesContainer");
+        this.modelSelect = useRef("modelSelect");
 
         onMounted(() => {
             this.loadRecentChats();
@@ -90,7 +92,8 @@ How can I assist you with your business analytics today?`,
         try {
             const response = await this.rpc("/ai_analytics/chat", {
                 message: message,
-                session_id: this.state.sessionId
+                session_id: this.state.sessionId,
+                model: this.state.selectedModel
             });
 
             this.state.isTyping = false;
@@ -101,7 +104,8 @@ How can I assist you with your business analytics today?`,
                     message: response.response,
                     is_user: false,
                     timestamp: response.timestamp,
-                    enhanced: true
+                    enhanced: true,
+                    model: this.state.selectedModel
                 };
                 this.state.messages.push(botMessage);
                 
@@ -138,6 +142,10 @@ How can I assist you with your business analytics today?`,
             event.preventDefault();
             this.sendMessage();
         }
+    }
+
+    onModelChange(event) {
+        this.state.selectedModel = event.target.value;
     }
 
 
@@ -247,6 +255,90 @@ How can I assist you with your business analytics today?`,
             } catch (error) {
                 console.error('Error deleting chat:', error);
             }
+        }
+    }
+    
+    // Enhanced timestamp formatting
+    formatTimestamp(date) {
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        
+        // If it's today, show time
+        if (diffDays === 0) {
+            return date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+        // If it's yesterday
+        else if (diffDays === 1) {
+            return `Yesterday ${date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            })}`;
+        }
+        // If it's within the last week
+        else if (diffDays < 7) {
+            const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return `${weekdays[date.getDay()]} ${date.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            })}`;
+        }
+        // Otherwise show full date
+        else {
+            return date.toLocaleDateString([], {
+                month: 'short',
+                day: 'numeric',
+                year: diffDays > 365 ? 'numeric' : undefined,
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+    }
+    
+    // Enhanced chat date formatting for sidebar
+    formatChatDate(dateString) {
+        if (!dateString || dateString === 'Unknown') return dateString;
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        
+        // Just now (< 1 minute)
+        if (diffMins < 1) {
+            return 'Just now';
+        }
+        // Minutes ago (< 1 hour)
+        else if (diffMins < 60) {
+            return `${diffMins}m ago`;
+        }
+        // Hours ago (< 24 hours)
+        else if (diffHours < 24) {
+            return `${diffHours}h ago`;
+        }
+        // Days ago (< 7 days)
+        else if (diffDays < 7) {
+            return `${diffDays}d ago`;
+        }
+        // Weeks ago (< 30 days)
+        else if (diffDays < 30) {
+            const weeks = Math.floor(diffDays / 7);
+            return `${weeks}w ago`;
+        }
+        // Months ago
+        else {
+            const months = Math.floor(diffDays / 30);
+            return `${months}mo ago`;
         }
     }
 }

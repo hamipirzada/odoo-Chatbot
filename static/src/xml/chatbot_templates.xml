@@ -19,11 +19,11 @@
                              t-on-click="() => this.loadChat(chat.id)">
                             <div class="ai-chat-preview">
                                 <div class="ai-chat-title" t-esc="chat.name"/>
-                                <div class="ai-chat-date" t-esc="chat.date"/>
+                                <div class="ai-chat-date" t-esc="this.formatChatDate(chat.date_iso || chat.date)"/>
                             </div>
                             <div class="ai-chat-actions">
                                 <button class="btn btn-sm btn-outline-danger ai-delete-chat-btn" 
-                                        t-on-click.stop="() => this.deleteChat(chat.id)" 
+                                        t-on-click.stop="(event) => this.deleteChat(chat.id, event)" 
                                         title="Delete Chat">
                                     <i class="fa fa-trash"/>
                                 </button>
@@ -50,10 +50,16 @@
                         <i t-attf-class="fa fa-#{state.sidebarCollapsed ? 'chevron-right' : 'chevron-left'}"/>
                     </button>
                     <div class="ai-chatbot-title">
-                        <i class="fa fa-robot"/> AI Business Intelligence Assistant
+                        <i class="fa fa-robot"/> AI Financial Analytics Assistant
                         <span class="ai-chatbot-status">
                             <i class="fa fa-circle text-success"/> Online
                         </span>
+                    </div>
+                    <div class="ai-model-selector">
+                        <label for="llmModel" class="ai-model-label">Model:</label>
+                        <select class="ai-model-select" t-ref="modelSelect" t-on-change="onModelChange">
+                            <option value="claude">Claude (Anthropic)</option>
+                        </select>
                     </div>
                     <div class="ai-chatbot-actions">
                         <button class="btn btn-sm btn-secondary" t-on-click="clearCurrentChat" title="Clear Current Chat">
@@ -72,7 +78,7 @@
                             
                             <div class="ai-message-meta">
                                 <span t-if="message.enhanced" class="ai-enhanced-badge">
-                                    <i class="fa fa-magic"/> Groq Enhanced
+                                    <i class="fa fa-magic"/> Claude Enhanced
                                 </span>
                                 <!-- Chart badge removed - text-based responses only -->
                                 <span class="ai-message-time" t-esc="message.timestamp"/>
@@ -100,7 +106,7 @@
                     <textarea 
                         class="ai-message-input"
                         t-ref="messageInput"
-                        placeholder="Ask me anything about your business data..."
+                        placeholder="Ask me about your financial data, journal entries, invoices, or account balances..."
                         rows="1"
                         t-on-keypress="onKeyPress"
                     />

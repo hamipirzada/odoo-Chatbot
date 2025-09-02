@@ -1,41 +1,40 @@
 # Odoo AI Analytics Chatbot
 
-A powerful AI-driven business intelligence chatbot for Odoo 17 that provides intelligent data analysis, insights, and interactive visualizations using Groq's LLM.
+A powerful AI-driven business intelligence chatbot for Odoo 17 that provides intelligent data analysis and insights using Claude's advanced language model.
 
 ## 🚀 Features
 
 ### 🤖 AI-Powered Analysis
-- **Groq LLM Integration**: Uses `llama-3.3-70b-versatile` model for natural language processing
+- **Claude AI Integration**: Uses Anthropic's Claude for advanced natural language processing
 - **Intent-Based Responses**: Understands query context and provides relevant business insights
 - **Real-time Data Access**: Connects directly to your Odoo database for live data analysis
 
-### 📊 Dynamic Chart Generation
-- **Query-Specific Charts**: Different visualizations based on query intent
-- **Multiple Chart Types**: Line, Bar, Pie charts with Chart.js integration
-- **Period-Specific Analysis**: Special handling for date/month-specific queries
-- **Interactive Visualizations**: Hover effects, responsive design
+### 📊 Text-Based Analysis
+- **Comprehensive Reports**: Detailed text-based analysis and insights
+- **Data-Driven Responses**: Analysis based on real Odoo data
+- **Accounting Focus**: Specialized in financial and accounting data analysis
+- **Intelligent Summaries**: Clear, actionable business insights
 
 ### 💼 Business Intelligence Coverage
-- **Sales Analysis**: Revenue trends, order patterns, customer insights
-- **Customer Analytics**: Customer behavior, top buyers, relationship analysis  
-- **Product Performance**: Inventory levels, best-sellers, product trends
-- **Financial Insights**: Invoice analysis, profit/loss tracking, financial health
-- **Universal Data Reader**: Automatically detects and analyzes all available Odoo modules
+- **Accounting Analysis**: Journal entries, financial transactions, balance analysis
+- **Invoice Management**: Invoice tracking, payment analysis, receivables/payables
+- **Financial Reporting**: Profit/loss insights, financial health indicators
+- **Data Consistency**: Precise, factual responses based on actual accounting data
+- **Restricted Scope**: Focused on accounting data for accuracy and reliability
 
 ### 🎯 Smart Features
 - **Chat Management**: Persistent chat history with sidebar navigation
 - **Responsive Design**: Mobile-friendly interface that adapts to screen size
 - **Error Handling**: Robust error management with fallback responses
-- **Timezone Support**: Automatic timezone conversion for accurate timestamps
-- **Security**: Business-only responses, no general purpose Q&A
+- **Timezone Support**: Accurate timestamps and date handling
+- **Security**: Accounting-focused responses, restricted data access
 
 ## 📋 Requirements
 
 - Odoo 17.0+
 - Python 3.8+
-- Required Python packages: `groq`, `pytz`, `requests`
-- Groq API key
-- Chart.js (included in static files)
+- Required Python packages: `pytz`, `requests`
+- Claude API key from Anthropic
 
 ## 🛠️ Installation
 
@@ -52,7 +51,7 @@ A powerful AI-driven business intelligence chatbot for Odoo 17 that provides int
 
 3. **Install required Python packages**:
    ```bash
-   pip install groq pytz requests
+   pip install pytz requests
    ```
 
 4. **Update Odoo apps list**:
@@ -63,18 +62,18 @@ A powerful AI-driven business intelligence chatbot for Odoo 17 that provides int
 5. **Install the module**:
    - Click "Install" on AI Analytics module
 
-6. **Configure Groq API**:
-   - Get your API key from [Groq Console](https://console.groq.com/)
+6. **Configure Claude API**:
+   - Get your API key from [Anthropic Console](https://console.anthropic.com/)
    - Set the API key using one of these methods:
-     - Environment variable: `export GROQ_API_KEY="your_api_key_here"`
+     - Environment variable: `export CLAUDE_API_KEY="your_api_key_here"`
      - Odoo system parameter: Go to Settings > Technical > Parameters > System Parameters
-       - Create new parameter: `ai_analytics.groq_api_key` with your API key value
+       - Create new parameter: `ai_analytics.claude_api_key` with your API key value
 
 ## 🔧 Configuration
 
 ### Environment Variables
 ```bash
-export GROQ_API_KEY="your_groq_api_key_here"
+export CLAUDE_API_KEY="your_claude_api_key_here"
 ```
 
 ### Odoo Configuration
@@ -84,15 +83,15 @@ The module automatically creates necessary database tables and configurations up
 
 ### Accessing the Chatbot
 1. Go to **AI Analytics** menu in Odoo
-2. Click on **AI Analytics Dashboard**  
+2. Click on **AI Business Assistant**
 3. Use the integrated chatbot interface
 
 ### Sample Queries
-- `"Show me sales data for February 2025"`
-- `"What are our top customers this month?"`
-- `"Analyze product performance trends"`
-- `"Give me financial insights for Q4"`
-- `"How are our sales compared to last month?"`
+- `"Show me accounting data for February 2025"`
+- `"Analyze journal entries for this month"`
+- `"What are our current account balances?"`
+- `"Give me invoice analysis for Q4"`
+- `"How are our payments compared to last month?"`
 
 ### Chat Features
 - **New Chat**: Start fresh conversations
@@ -112,40 +111,36 @@ The module automatically creates necessary database tables and configurations up
 - **`static/src/js/chatbot_widget.js`**: OWL component for chatbot UI
 - **`static/src/xml/chatbot_templates.xml`**: HTML templates
 - **`static/src/css/chatbot.css`**: Styling and responsive design
-- **`static/src/js/chart.min.js`**: Chart.js library for visualizations
 
 ### Key Features Implementation
-- **Universal Data Access**: Intelligent model detection across all Odoo modules
-- **Chart Persistence**: Charts remain visible when switching between chats
-- **Intent Recognition**: Advanced query analysis for appropriate chart generation
-- **Timezone Handling**: Automatic conversion to user's local timezone
+- **Accounting Data Access**: Intelligent analysis of financial data
+- **Intent Recognition**: Advanced query analysis for relevant data retrieval
+- **Data Consistency**: Same query always returns same results
+- **Timezone Handling**: Accurate timestamp processing
 
 ## 🎨 Customization
 
-### Adding New Chart Types
-Extend the `_generate_chart_data_by_intent()` method in `models/ai_chatbot.py`:
+### Adding New Data Analysis
+Extend the accounting data analysis methods in `models/ai_chatbot.py`:
 
 ```python
-def _get_custom_chart_data(self, message):
-    # Your custom chart logic here
-    return {
-        'charts': [chart_config],
-        'has_charts': True
-    }
+def _get_custom_accounting_analysis(self, message):
+    # Your custom analysis logic here
+    return "Custom accounting insights..."
 ```
 
 ### Modifying UI
 Update templates in `static/src/xml/chatbot_templates.xml` and styles in `static/src/css/chatbot.css`.
 
-### Adding New Data Sources
-Extend the `_detect_relevant_models()` method to include additional Odoo models.
+### Extending Data Sources
+Currently focused on accounting data (account_move, account_move_line). Extend carefully to maintain data accuracy.
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
-1. **Charts not rendering**: Check browser console for JavaScript errors
-2. **No data in responses**: Verify database has relevant records
-3. **API errors**: Confirm Groq API key is properly configured
+1. **No AI responses**: Check Claude API key configuration
+2. **No data in responses**: Verify database has accounting records
+3. **API errors**: Confirm Claude API key is properly configured
 4. **Module not loading**: Check Odoo logs for installation errors
 
 ### Debug Mode
@@ -156,10 +151,11 @@ log_level = debug
 
 ## 🔒 Security
 
-- **Business-Only Responses**: Chatbot only answers Odoo-related business questions
+- **Accounting-Only Responses**: Chatbot only answers accounting and financial questions
 - **No External Data**: All analysis based on your Odoo database
-- **API Security**: Groq API calls use secure HTTPS endpoints
+- **API Security**: Claude API calls use secure HTTPS endpoints
 - **Access Control**: Respects Odoo user permissions and security groups
+- **Data Restriction**: Limited to accounting tables only for security
 
 ## 🤝 Contributing
 
@@ -175,8 +171,7 @@ This project is licensed under the LGPL-3.0 License - see the LICENSE file for d
 
 ## 🙏 Acknowledgments
 
-- **Groq**: For providing the powerful LLM API
-- **Chart.js**: For beautiful chart visualizations
+- **Anthropic**: For providing the powerful Claude AI API
 - **Odoo Community**: For the amazing ERP framework
 - **OWL Framework**: For modern JavaScript components
 
@@ -188,12 +183,12 @@ For support and questions:
 
 ## 🚀 Roadmap
 
-- [ ] Multi-language support
-- [ ] Advanced analytics dashboards
+- [ ] Extended accounting modules support
+- [ ] Advanced financial analytics
 - [ ] Export capabilities (PDF, Excel)
-- [ ] Voice input integration
-- [ ] Mobile app companion
-- [ ] Advanced AI training on business data
+- [ ] Multi-language support
+- [ ] Mobile responsiveness improvements
+- [ ] Enhanced data visualization
 
 ---
 

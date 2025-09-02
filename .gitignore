@@ -37,3 +37,8 @@ share/python-wheels/
 
 # Logs
 *.log
+
+# Test and broken files
+*_broken.py
+*_test.py
+test_*
